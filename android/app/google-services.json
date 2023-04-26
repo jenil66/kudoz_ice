@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "870290393627",
+    "project_id": "kudoz-69d0c",
+    "storage_bucket": "kudoz-69d0c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870290393627:android:50465f2d809a6bcbe086be",
+        "android_client_info": {
+          "package_name": "com.example.kudoz_ice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870290393627-a40bgenp4kljgm1usvj9l5vd33vh7ljd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kudoz_ice",
+            "certificate_hash": "05f19b5a652fb043210eb24106a13685b924b5bc"
+          }
+        },
+        {
+          "client_id": "870290393627-m988tiuhtgnmbqb29td5k4bs2lu66421.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABVihCx3Zd9GbwoibCq1AT9lA8Y_VSkHo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870290393627-m988tiuhtgnmbqb29td5k4bs2lu66421.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
