@@ -62,8 +62,8 @@ class Listviewwidget extends StatelessWidget {
                           pro_price: data["pro_price"],
                           pro_name: data["pro_name"],
                           pro_id: data["pro_id"],
-
                           cat_name: data["cat_name"],
+                          pro_des: data["pro_des"],
                           onTap: () {
                             Routingpage.gotonext(
                                 context: context,

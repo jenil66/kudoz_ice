@@ -106,6 +106,7 @@ class _searchpageState extends State<searchpage> {
                           child: CircularProgressIndicator(),
                         );
                       }
+
                       var varData = searchFunction(query, streamsnapshort.data!.docs);
                       return varData.isEmpty
                           ? Center(

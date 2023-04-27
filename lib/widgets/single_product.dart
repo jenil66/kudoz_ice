@@ -26,7 +26,8 @@ class singleproduct extends StatefulWidget {
      this.pro_rating,
     this.pro_image,
     this.pro_name,
-    this.productfavorite, this.pro_des,
+    this.productfavorite,
+     this.pro_des,
   }) : super(key: key);
 
   @override
@@ -79,7 +80,7 @@ class _singleproductState extends State<singleproduct> {
                           isfavorite = !isfavorite;
                           if (isfavorite == true) {
                             favoriteprovider.favorite(
-                              pro_des: widget.pro_des,
+                              pro_des: widget.pro_des.toString(),
                               pro_id: widget.pro_id,
                               pro_cat: widget.cat_name,
                               pro_price: widget.pro_price,
