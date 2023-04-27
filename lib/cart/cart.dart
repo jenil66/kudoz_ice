@@ -56,7 +56,7 @@ class _CartState extends State<Cart> {
           IconButton(
               onPressed: () {
                 clearCart();
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                     Routingpage.pushreplase(
                         context: context, navigateto: btn());
                 setState(() {

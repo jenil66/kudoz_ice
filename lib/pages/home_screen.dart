@@ -138,7 +138,6 @@ class _HomeScreenState extends State<HomeScreen> {
     Cartprovider cartprovider = Provider.of<Cartprovider>(context);
     cartprovider.getcartData();
     return Scaffold(
-
       body: ListView(children: [
         Padding(
           padding: EdgeInsets.all(Dimensions.h8),
@@ -218,6 +217,7 @@ class _btnState extends State<btn> {
     wishlish(),
     Cart(),
     myorderlist(),
+    profile()
 
   ];
 
@@ -231,6 +231,8 @@ class _btnState extends State<btn> {
         backgroundColor: Colors.grey[900],
         title: kudozname(),
         centerTitle: true,
+        leading: Image.asset("assets/kudoz.png"),
+
         actions: [
           IconButton(
             onPressed: () {
@@ -242,7 +244,7 @@ class _btnState extends State<btn> {
           )
         ],
       ):null,
-      drawer: drawer(),
+      // drawer: drawer(),
       // backgroundColor: Colors.transparent,
       body: IndexedStack(
         index: _currentIndex,
@@ -334,6 +336,14 @@ class _btnState extends State<btn> {
                     Icons.shopping_bag_outlined
                   ),
                   label: 'My Orders',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                      _currentIndex==4?
+                      Icons.person_3:
+                      Icons.person_3_outlined
+                  ),
+                  label: 'Profile',
                 ),
 
               ],
