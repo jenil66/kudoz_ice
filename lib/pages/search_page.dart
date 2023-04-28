@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../route/routing_page.dart';
+import '../widgets/List_view_widget.dart';
 import '../widgets/details/details.dart';
 import '../widgets/dimesial.dart';
 import '../widgets/kudoz_name.dart';
@@ -33,8 +34,20 @@ class _searchpageState extends State<searchpage> {
     }).toList();
     return result;
   }
+  searchCategoryFunction(queryCat, searchList) {
+    cat_result = searchList.where((element) {
+      return element["cat_name"].toLowerCase().contains(query) ||
+          element["cat_name"].toUpperCase().contains(query) ||
+          element["cat_name"].contains(query) ||
+          element["cat_name"].toLowerCase().contains(query) &&
+              element["cat_name"].contains(query) &&
+              element["cat_name"].toUpperCase().contains(query);
+    }).toList();
+    return cat_result;
+  }
 
-  // List<Map<String, dynamic>> searchCategoryFunction(String queryCat, List<Map<String, dynamic>> searchList) {
+  //
+  // List<Map<String, dynamic>> searchCategoryFunction(String queryCat, searchList) {
   //   List<Map<String, dynamic>> cat_result = searchList.where((ele) {
   //     String catName = ele["cat_name"].toString().toLowerCase();
   //     return catName.contains(queryCat.toLowerCase());
@@ -85,8 +98,8 @@ class _searchpageState extends State<searchpage> {
               ),
 
 
-      query == ""
-                  ? Center(
+
+              query_cat==""? Center(
                 child: Text(
                   '',
                   style: TextStyle(
@@ -94,12 +107,74 @@ class _searchpageState extends State<searchpage> {
                   ),
                 ),
               )
+                  :SizedBox(height: 70,child: Container(
+                height: Dimensions.h40,
+                child: StreamBuilder(
+                  stream:
+                  FirebaseFirestore.instance.collection("Category").snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> streamsnapshort) {
+                    if (!streamsnapshort.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    var vardata=searchCategoryFunction(query_cat, streamsnapshort.data!.docs);
+                    return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: cat_result.length,
+                        shrinkWrap: true,
+                        itemBuilder: (ctx, index) {
+                          print(vardata.toString());
+                          return Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Listviewwidget(
+                                              collection: "Category",
+                                              id: vardata[index]["cat_id"],
+                                              subcollection: vardata[index]["cat_name"],
+                                            )));
+                                  });
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(Dimensions.h10),
+                                  height: Dimensions.h40,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                      BorderRadius.circular(Dimensions.h15),
+                                      color: Colors.grey[900]),
+                                  child: Text(
+                                      vardata[index]["cat_name"],
+                                      style: TextStyle(
+                                        // fontSize:Dimensions.h15 ,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold)),
+
+                                  // child: Text(CategoryList[index],style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal))
+                                ),
+                              ),
+                              SizedBox(width: Dimensions.w15)
+                            ],
+                          );
+                        });
+                  },
+                ),
+              ),),
+              query == ""
+                  ? Center(
+                child: SizedBox(height: 20,child: Text(
+                  '',
+                  style: TextStyle(
+                    fontSize: Dimensions.h5,
+                  ),
+                ),),
+              )
                   : SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection("product")
-                        .snapshots(),
+                    stream: FirebaseFirestore.instance.collection("product").snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> streamsnapshort) {
                       if (!streamsnapshort.hasData) {
                         return const Center(
@@ -111,7 +186,7 @@ class _searchpageState extends State<searchpage> {
                       return varData.isEmpty
                           ? Center(
                         child: Text(
-                          "No Item Found!",
+                          "No Product Found!",
                           style: TextStyle(
                             fontSize: Dimensions.h25,
                             fontWeight: FontWeight.bold,
@@ -146,7 +221,7 @@ class _searchpageState extends State<searchpage> {
                             );
                           });
                     }),
-              )
+              ),
             ],
           ),
         ),

@@ -254,6 +254,7 @@ class _btnState extends State<btn> {
         padding: EdgeInsets.only(top: 5, left: 7, bottom: 5, right: 7),
         child: Container(
           decoration: BoxDecoration(
+            color: Colors.transparent,
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.4),
@@ -270,7 +271,8 @@ class _btnState extends State<btn> {
               currentIndex: _currentIndex,
 
               // type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.transparent,
+
               selectedItemColor: Color(0xffF42852),
               iconSize: 30,
               unselectedItemColor: Colors.grey[900],
