@@ -76,18 +76,6 @@ class _singlecartitemState extends State<singlecartitem> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding: EdgeInsets.all(Dimensions.h10),
-                  child: Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      // Show the product rating on the top left corner of the image
-                      // Show the favorite icon on the bottom right corner of the image
-                      // Positioned(
-                      //   bottom: -Dimensions.h10,
-                      //   right: -Dimensions.w10,
-                      //   child:
-                      // ),
-                    ],
-                  ),
                 ),
               ),
               Expanded(

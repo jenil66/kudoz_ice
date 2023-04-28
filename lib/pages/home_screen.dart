@@ -8,6 +8,7 @@ import 'package:kudoz_ice/widgets/List_view_widget.dart';
 import 'package:kudoz_ice/pages/search_page.dart';
 import 'package:kudoz_ice/pages/wishlist.dart';
 import 'package:kudoz_ice/route/routing_page.dart';
+import 'package:kudoz_ice/widgets/constant.dart';
 import 'package:provider/provider.dart';
 import '../order/my_order_list.dart';
 import '../provider/cart_provider.dart';
@@ -75,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         SizedBox(height: Dimensions.h15),
         Container(
-          height: Dimensions.h40,
+          height: Dimensions.h120,
           child: StreamBuilder(
             stream:
                 FirebaseFirestore.instance.collection("Category").snapshots(),
@@ -97,32 +98,53 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Listviewwidget(
-                                        collection: "Category",
-                                        id: streamsnapshort
-                                            .data!.docs[index].id,
+                                            collection: "Category",
+                                            id: streamsnapshort
+                                                .data!.docs[index].id,
                                             subcollection: streamsnapshort
                                                 .data!.docs[index]["cat_name"],
                                           )));
                             });
                           },
                           child: Container(
-                            padding: EdgeInsets.all(Dimensions.h10),
-                            height: Dimensions.h40,
-                            decoration: BoxDecoration(
+                              padding: EdgeInsets.all(Dimensions.h10),
+                              height: Dimensions.h120,
+                              width: Dimensions.h150,
+                              decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.circular(Dimensions.h15),
-                                color: Colors.grey[900]),
-                            child: Text(
-                                streamsnapshort.data!.docs[index]["cat_name"],
-                                style: TextStyle(
-                                    // fontSize:Dimensions.h15 ,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
+                              ),
+                              child: Stack(children: [
+                                Container(
+                                  height: 140,
+                                  decoration: BoxDecoration(
+                                    color: greycolor.withOpacity(0.7),
+                                    image: DecorationImage(
+                                        image: NetworkImage(streamsnapshort
+                                            .data!.docs[index]["ci"]),
+                                        fit: BoxFit.fill,
+                                        colorFilter: ColorFilter.mode(
+                                            Colors.black.withOpacity(0.5),
+                                            BlendMode.dstATop)),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: EdgeInsets.all(Dimensions.h10),
+                                ),
+                                Positioned(
+                                    child: Center(
+                                        child: Text(
+                                  streamsnapshort.data!.docs[index]["cat_name"],
+                                  style: TextStyle(
+                                      fontSize: 35,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                )))
+                              ])
 
-                            // child: Text(CategoryList[index],style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal))
-                          ),
+                              // child: Text(CategoryList[index],style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal))
+                              ),
                         ),
-                        SizedBox(width: Dimensions.w15)
+                        SizedBox(width: Dimensions.w10)
                       ],
                     );
                   });
@@ -218,7 +240,6 @@ class _btnState extends State<btn> {
     Cart(),
     myorderlist(),
     profile()
-
   ];
 
   @override
@@ -226,24 +247,25 @@ class _btnState extends State<btn> {
     Cartprovider cartprovider = Provider.of<Cartprovider>(context);
     cartprovider.getcartData();
     return Scaffold(
-      appBar: _currentIndex==0?
-      AppBar(
-        backgroundColor: Colors.grey[900],
-        title: kudozname(),
-        centerTitle: true,
-        leading: Image.asset("assets/kudoz.png"),
-
-        actions: [
-          IconButton(
-            onPressed: () {
-              Routingpage.gotonext(context: context, navigateto: searchpage());
-            },
-            icon: Icon(
-              Icons.search_rounded,
-            ),
-          )
-        ],
-      ):null,
+      appBar: _currentIndex == 0
+          ? AppBar(
+              backgroundColor: Colors.grey[900],
+              title: kudozname(),
+              centerTitle: true,
+              leading: Image.asset("assets/kudoz.png"),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Routingpage.gotonext(
+                        context: context, navigateto: searchpage());
+                  },
+                  icon: Icon(
+                    Icons.search_rounded,
+                  ),
+                )
+              ],
+            )
+          : null,
       // drawer: drawer(),
       // backgroundColor: Colors.transparent,
       body: IndexedStack(
@@ -265,8 +287,7 @@ class _btnState extends State<btn> {
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(
-                40),
+            borderRadius: BorderRadius.circular(40),
             child: BottomNavigationBar(
               currentIndex: _currentIndex,
 
@@ -286,28 +307,21 @@ class _btnState extends State<btn> {
                 BottomNavigationBarItem(
                   // backgroundColor: Colors.black,
                   icon: Icon(
-                    _currentIndex==0?
-                    Icons.home
-                        :Icons.home_outlined
-                  ),
+                      _currentIndex == 0 ? Icons.home : Icons.home_outlined),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(
-                    _currentIndex==1?
-                    Icons.favorite:
-                    Icons.favorite_border_rounded
-                  ),
+                  icon: Icon(_currentIndex == 1
+                      ? Icons.favorite
+                      : Icons.favorite_border_rounded),
                   label: 'Wishlist',
                 ),
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: [
-                      Icon(
-                          _currentIndex==2?
-                          Icons.shopping_cart:
-                          Icons.shopping_cart_outlined
-                      ),
+                      Icon(_currentIndex == 2
+                          ? Icons.shopping_cart
+                          : Icons.shopping_cart_outlined),
                       if (cartprovider.getcartlist.isNotEmpty)
                         Positioned(
                           right: 0,
@@ -332,22 +346,17 @@ class _btnState extends State<btn> {
                   label: 'Cart',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(
-                    _currentIndex==3?
-                    Icons.shopping_bag:
-                    Icons.shopping_bag_outlined
-                  ),
+                  icon: Icon(_currentIndex == 3
+                      ? Icons.shopping_bag
+                      : Icons.shopping_bag_outlined),
                   label: 'My Orders',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(
-                      _currentIndex==4?
-                      Icons.person_3:
-                      Icons.person_3_outlined
-                  ),
+                  icon: Icon(_currentIndex == 4
+                      ? Icons.person_3
+                      : Icons.person_3_outlined),
                   label: 'Profile',
                 ),
-
               ],
             ),
           ),
