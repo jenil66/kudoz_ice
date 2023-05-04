@@ -228,7 +228,7 @@ class _profileState extends State<profile> {
                                                   .doc(FirebaseAuth.instance.currentUser!.uid)
                                                   .update({"User_image": "",});
                                             }
-                                            Navigator.pop(context);
+                                            Routingpage.pushreplase(context: context, navigateto: btn());
                                           },
                                           child: Icon(
                                             Icons.delete,
@@ -269,10 +269,11 @@ class _profileState extends State<profile> {
                                                       .doc(FirebaseAuth.instance.currentUser!.uid)
                                                       .update({"User_image": imageUrl,});
                                                   print('User data updated successfully');
-                                                  Routingpage.pushreplase(context: context, navigateto: profile());
+
                                                 } catch (e) {
                                                   print('Error updating user data: $e');
                                                 }
+                                                Routingpage.pushreplase(context: context, navigateto: btn());
                                               },
                                               child: CircleAvatar(
                                                 radius: Dimensions.r20 +
@@ -334,6 +335,7 @@ class _profileState extends State<profile> {
                                                 } catch (e) {
                                                   print('Error updating user data: $e');
                                                 }
+                                                Routingpage.pushreplase(context: context, navigateto: btn());
 
                                               },
 

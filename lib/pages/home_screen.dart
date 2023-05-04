@@ -14,7 +14,7 @@ import '../order/my_order_list.dart';
 import '../provider/cart_provider.dart';
 import '../widgets/details/details.dart';
 import '../widgets/dimesial.dart';
-import '../widgets/drawer.dart';
+import '../widgets/profile.dart';
 import '../widgets/kudoz_name.dart';
 import '../widgets/single_product.dart';
 

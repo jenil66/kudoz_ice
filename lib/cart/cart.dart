@@ -70,15 +70,15 @@ class _CartState extends State<Cart> {
                 color: Color(0xffF42852),
               ))
               :Container(),
-          IconButton(
-              onPressed: () {
-                Routingpage.pushreplase(
-                    context: context, navigateto: btn());
-              },
-              icon: Icon(
-                Icons.home,
-                color: Color(0xffF42852),
-              )),
+          // IconButton(
+          //     onPressed: () {
+          //       Routingpage.pushreplase(
+          //           context: context, navigateto: btn());
+          //     },
+          //     icon: Icon(
+          //       Icons.home,
+          //       color: Color(0xffF42852),
+          //     )),
         ],
       ),
       body: cartprovider.getcartlist.isEmpty
@@ -95,7 +95,7 @@ class _CartState extends State<Cart> {
           shrinkWrap: true,
           itemBuilder: (ctx, index) {
             var data = cartprovider.cartlist[index];
-            print(data);
+            // print(data);
             return singlecartitem(
               name: data.name,
               pro_image: data.pro_image,

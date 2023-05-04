@@ -1,4 +1,7 @@
+// import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/material.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:kudoz_ice/authentication/registration.dart';
 //
 //
 // class OtpScreen extends StatefulWidget {
@@ -63,9 +66,9 @@
 //                 SizedBox(height: 15),
 //                 Pinput(
 //                   length: 6,
-//                   defaultPinTheme: defaultPinTheme,
-//                   focusedPinTheme: focusedPinTheme,
-//                   submittedPinTheme: submittedPinTheme,
+//                   // defaultPinTheme: defaultPinTheme,
+//                   // focusedPinTheme: focusedPinTheme,
+//                   // submittedPinTheme: submittedPinTheme,
 //                   androidSmsAutofillMethod:
 //                   AndroidSmsAutofillMethod.smsRetrieverApi,
 //                   validator: (value) {
@@ -85,7 +88,7 @@
 //                   height: 45,
 //                   width: double.infinity,
 //                   child: ElevatedButton(
-//                     onPressed: (){},
+//                     // onPressed: (){},
 //                     onPressed: () async {
 //                       if (_formKey.currentState!.validate()) {
 //                         try {

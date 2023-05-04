@@ -56,6 +56,7 @@ class _searchpageState extends State<searchpage> {
   // }
 
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,6 +111,7 @@ class _searchpageState extends State<searchpage> {
                   :SizedBox(height: 70,child: Container(
                 height: Dimensions.h40,
                 child: StreamBuilder(
+
                   stream:
                   FirebaseFirestore.instance.collection("Category").snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> streamsnapshort) {
@@ -181,7 +183,7 @@ class _searchpageState extends State<searchpage> {
                           child: CircularProgressIndicator(),
                         );
                       }
-
+                      // var data=streamsnapshort.data!.docs
                       var varData = searchFunction(query, streamsnapshort.data!.docs);
                       return varData.isEmpty
                           ? Center(

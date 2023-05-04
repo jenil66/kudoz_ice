@@ -36,7 +36,7 @@ class Listviewwidget extends StatelessWidget {
                 .collection(subcollection)
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> streamsnapshort) {
-              print(id);
+              // print(id);
 
               if (!streamsnapshort.hasData) {
                 return const Center(

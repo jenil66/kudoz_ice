@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kudoz_ice/pages/home_screen.dart';
 import 'package:kudoz_ice/route/routing_page.dart';
 import 'package:kudoz_ice/widgets/constant.dart';
-import 'package:kudoz_ice/widgets/drawer.dart';
+import 'package:kudoz_ice/widgets/profile.dart';
 import '../widgets/dimesial.dart';
 
 class myorderlist extends StatefulWidget {
@@ -51,7 +51,7 @@ class _myorderlistState extends State<myorderlist> {
             // .orderBy("utc_time", descending: true)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> streamsnapshort) {
-          print(FirebaseAuth.instance.currentUser!.uid);
+          // print(FirebaseAuth.instance.currentUser!.uid);
           if (!streamsnapshort.hasData) {
             return Center(child: CircularProgressIndicator());
           }
