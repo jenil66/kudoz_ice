@@ -108,7 +108,8 @@ class _searchpageState extends State<searchpage> {
                   ),
                 ),
               )
-                  :SizedBox(height: 70,child: Container(
+                  :SizedBox(height: 70,
+                child: Container(
                 height: Dimensions.h40,
                 child: StreamBuilder(
 

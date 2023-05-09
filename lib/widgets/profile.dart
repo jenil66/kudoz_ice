@@ -76,50 +76,12 @@ class _profileState extends State<profile> {
 
   UserModel? userModel;
 
-  Future<void> getCurrentUserData() async {
-    final docSnapshot = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    if (docSnapshot.exists) {
-      setState(() {
-        userModel = UserModel.fromDocument(docSnapshot);
-        if (userModel!.user_image!.isNotEmpty) {
-          if (userModel!.user_image != null) {
-            imageLoaded = false;
-            NetworkImage(userModel!.user_image!).resolve(ImageConfiguration()).addListener(
-              ImageStreamListener((_, __) {
-                setState(() {
-                  imageLoaded = true;
-                });
-              }),
-            );
-          }
-        }
-      });
-    } else {
-      print("Document Does Not Exist");
-    }
-  }
 
-
-
-
-
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUserData();
-  }
 
 
   @override
   Widget build(BuildContext context) {
-    if (userModel == null) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+
 
     Cartprovider cartprovider = Provider.of<Cartprovider>(context);
     cartprovider.getcartData();
@@ -142,257 +104,280 @@ class _profileState extends State<profile> {
           //         color: Colors.grey[350]
           //     ),
           //     child: ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: Dimensions.r50,
-                    backgroundColor: Colors.white,
+          StreamBuilder(stream: FirebaseFirestore.instance.collection("users").where("userid",isEqualTo: FirebaseAuth.instance.currentUser!.uid.toString()).snapshots(),
+              builder:(context, AsyncSnapshot<QuerySnapshot> streamsnapshort) {
+                if (
+                    !streamsnapshort.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if(streamsnapshort.hasData){
+                  if(streamsnapshort.hasData==ConnectionState.waiting){
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }
+                var data =streamsnapshort.data!.docs[0];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: Dimensions.r50,
+                          backgroundColor: Colors.white,
 
-                    child: ClipOval(
-                      child: userModel!.user_image== ""
-                          ? Icon(
-                        Icons.person,
-                        size: 90,
+                          child: ClipOval(
+                            child: data["User_image"]== ""
+                                ? Icon(
+                              Icons.person,
+                              size: 90,
 
-                        color: Colors.black54,
-                      )
-                          : imageLoaded
-                          ? userModel!.user_image!.isNotEmpty?Image.network(userModel!.user_image!,height: Dimensions.h170,
-                        width: Dimensions.h170,
-                        fit: BoxFit.cover,):
-                      CircularProgressIndicator(color: Colors.black,)
-                          : CircularProgressIndicator(color: Colors.black,),
-                      // Image.network(
-                      //   "${getimage()}",
-                      //   height: Dimensions.h170,
-                      //   width: Dimensions.h170,
-                      //   fit: BoxFit.cover,
-                      // ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 1,
-                    right: -15,
-                    child: IconButton(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(Dimensions.h20),
+                              color: Colors.black54,
+                            )
+                                : data["User_image"].toString().isNotEmpty? Image.network(data["User_image"],height: Dimensions.h170,
+                            width: Dimensions.h170,
+                            fit: BoxFit.cover,):
+                  CircularProgressIndicator(color: Colors.black,)
+                    // : CircularProgressIndicator(color: Colors.black,),
+                            //     ? userModel!.user_image!.isNotEmpty?Image.network(userModel!.user_image!,height: Dimensions.h170,
+                            //   width: Dimensions.h170,
+                            //   fit: BoxFit.cover,):
+                            // CircularProgressIndicator(color: Colors.black,)
+                            //     : CircularProgressIndicator(color: Colors.black,),
+                            // Image.network(
+                            //   "${getimage()}",
+                            //   height: Dimensions.h170,
+                            //   width: Dimensions.h170,
+                            //   fit: BoxFit.cover,
+                            // ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 1,
+                          right: -15,
+                          child: IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(Dimensions.h20),
+                                  ),
+                                ),
+                                builder: (context) {
+                                  return Container(
+                                    height: Dimensions.h170,
+                                    width: double.infinity,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: Dimensions.w20,
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Profile Photo",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: Dimensions.h25,
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  if(data["User_image"]==""){
+                                                    setState(() {
+                                                      Fluttertoast.showToast(
+                                                          msg: "Profile Photo Not Found",
+                                                          toastLength: Toast.LENGTH_SHORT);
+                                                    });
+                                                  }
+                                                  else{
+
+                                                    FirebaseFirestore.instance
+                                                        .collection("users")
+                                                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                        .update({"User_image": "",}).then((value) {setState(() {
+                                                          Fluttertoast.showToast(msg: "Profile Photo Deleted!");
+                                                        });});
+                                                  }
+                                                  Routingpage.pushreplase(context: context, navigateto: btn());
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  color: Colors.grey,
+                                                  size: Dimensions.w25,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Row(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+                                                      // Navigator.pop(context);
+                                                      ImagePicker picker = ImagePicker();
+                                                      XFile? file = await picker.pickImage(source: ImageSource.camera);
+                                                      if (file == null) return;
+
+                                                      String uniqueFilename = FirebaseAuth.instance.currentUser!.uid;
+                                                      Reference reference = FirebaseStorage.instance.ref();
+                                                      Reference refImg = reference.child("user_profile_photos");
+                                                      Reference refUploadImage = refImg.child(uniqueFilename);
+
+                                                      try {
+                                                        await refUploadImage.putFile(File(file.path));
+                                                        String imageUrl = await refUploadImage.getDownloadURL();
+                                                        print('Image URL: $imageUrl');
+
+                                                        await FirebaseFirestore.instance
+                                                            .collection("users")
+                                                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                            .update({"User_image": imageUrl,});
+                                                        print('User data updated successfully');
+
+                                                      } catch (e) {
+                                                        print('Error updating user data: $e');
+                                                      }
+                                                      setState(() {
+                                                        Fluttertoast.showToast(msg: "Profile Photo Updated!");
+                                                      });
+                                                      Routingpage.pushreplase(context: context, navigateto: btn());
+                                                    },
+                                                    child: CircleAvatar(
+                                                      radius: Dimensions.r20 +
+                                                          Dimensions.r20,
+                                                      backgroundColor:
+                                                      Colors.grey.shade200,
+                                                      child: Icon(
+                                                        Icons.camera_alt,
+                                                        color: Colors.grey,
+                                                        size: Dimensions.h35,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: Dimensions.h10,
+                                                  ),
+                                                  Text(
+                                                    "Camera",
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                        FontWeight.w500,
+                                                        fontSize: Dimensions.h18),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                width: Dimensions.w50,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      // Navigator.pop(context);
+                                                      Navigator.pop(context);
+                                                      ImagePicker picker = ImagePicker();
+                                                      XFile? file = await picker.pickImage(source: ImageSource.gallery);
+                                                      if (file == null) return;
+
+                                                      String uniqueFilename = FirebaseAuth.instance.currentUser!.uid;
+                                                      Reference reference = FirebaseStorage.instance.ref();
+                                                      Reference refImg = reference.child("user_profile_photos");
+                                                      Reference refUploadImage = refImg.child(uniqueFilename);
+
+                                                      try {
+                                                        await refUploadImage.putFile(File(file.path));
+                                                        String imageUrl = await refUploadImage.getDownloadURL();
+                                                        print('Image URL: $imageUrl');
+
+                                                        await FirebaseFirestore.instance
+                                                            .collection("users")
+                                                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                            .update({"User_image": imageUrl,});
+
+                                                        print('User data updated successfully');
+                                                      } catch (e) {
+                                                        print('Error updating user data: $e');
+                                                      }
+                                                      Routingpage.pushreplase(context: context, navigateto: btn());
+                                                     setState(() {
+                                                      Fluttertoast.showToast(msg: "Profile Photo Updated!");
+                                                      });
+
+                                                    },
+
+                                                    child: CircleAvatar(
+                                                      radius: Dimensions.r20 +
+                                                          Dimensions.r20,
+                                                      backgroundColor:
+                                                      Colors.grey.shade200,
+                                                      child: Icon(
+                                                        Icons.photo,
+                                                        color: Colors.grey,
+                                                        size: Dimensions.h35,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: Dimensions.h10,
+                                                  ),
+                                                  Text(
+                                                    "Gallery",
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                        FontWeight.w500,
+                                                        fontSize: Dimensions.h18),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            icon: Icon(
+                              Icons.add_a_photo,
+                              color: Colors.black,
+                              size: 22,
                             ),
                           ),
-                          builder: (context) {
-                            return Container(
-                              height: Dimensions.h170,
-                              width: double.infinity,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: Dimensions.w20,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Profile Photo",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: Dimensions.h25,
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                            if(userModel!.user_image==""){
-                                              setState(() {
-                                                Fluttertoast.showToast(
-                                                    msg: "Profile Photo Not Found",
-                                                    toastLength: Toast.LENGTH_SHORT);
-                                              });
-                                            }
-                                            else{
-
-                                              FirebaseFirestore.instance
-                                                  .collection("users")
-                                                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                                                  .update({"User_image": "",});
-                                            }
-                                            Routingpage.pushreplase(context: context, navigateto: btn());
-                                          },
-                                          child: Icon(
-                                            Icons.delete,
-                                            color: Colors.grey,
-                                            size: Dimensions.w25,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                          children: [
-                                            InkWell(
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                // Navigator.pop(context);
-                                                ImagePicker picker = ImagePicker();
-                                                XFile? file = await picker.pickImage(source: ImageSource.camera);
-                                                if (file == null) return;
-
-                                                String uniqueFilename = FirebaseAuth.instance.currentUser!.uid;
-                                                Reference reference = FirebaseStorage.instance.ref();
-                                                Reference refImg = reference.child("user_profile_photos");
-                                                Reference refUploadImage = refImg.child(uniqueFilename);
-
-                                                try {
-                                                  await refUploadImage.putFile(File(file.path));
-                                                  String imageUrl = await refUploadImage.getDownloadURL();
-                                                  print('Image URL: $imageUrl');
-
-                                                  await FirebaseFirestore.instance
-                                                      .collection("users")
-                                                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                                                      .update({"User_image": imageUrl,});
-                                                  print('User data updated successfully');
-
-                                                } catch (e) {
-                                                  print('Error updating user data: $e');
-                                                }
-                                                Routingpage.pushreplase(context: context, navigateto: btn());
-                                              },
-                                              child: CircleAvatar(
-                                                radius: Dimensions.r20 +
-                                                    Dimensions.r20,
-                                                backgroundColor:
-                                                Colors.grey.shade200,
-                                                child: Icon(
-                                                  Icons.camera_alt,
-                                                  color: Colors.grey,
-                                                  size: Dimensions.h35,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: Dimensions.h10,
-                                            ),
-                                            Text(
-                                              "Camera",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                  fontSize: Dimensions.h18),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          width: Dimensions.w50,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                          children: [
-                                            InkWell(
-                                              onTap: () async {
-                                                // Navigator.pop(context);
-                                                Navigator.pop(context);
-                                                ImagePicker picker = ImagePicker();
-                                                XFile? file = await picker.pickImage(source: ImageSource.gallery);
-                                                if (file == null) return;
-
-                                                String uniqueFilename = FirebaseAuth.instance.currentUser!.uid;
-                                                Reference reference = FirebaseStorage.instance.ref();
-                                                Reference refImg = reference.child("user_profile_photos");
-                                                Reference refUploadImage = refImg.child(uniqueFilename);
-
-                                                try {
-                                                  // Upload image to Firebase Storage
-                                                  await refUploadImage.putFile(File(file.path));
-                                                  String imageUrl = await refUploadImage.getDownloadURL();
-                                                  print('Image URL: $imageUrl');
-
-                                                  await FirebaseFirestore.instance
-                                                      .collection("users")
-                                                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                                                      .update({"User_image": imageUrl,});
-
-                                                  print('User data updated successfully');
-                                                } catch (e) {
-                                                  print('Error updating user data: $e');
-                                                }
-                                                Routingpage.pushreplase(context: context, navigateto: btn());
-
-                                              },
-
-                                              child: CircleAvatar(
-                                                radius: Dimensions.r20 +
-                                                    Dimensions.r20,
-                                                backgroundColor:
-                                                Colors.grey.shade200,
-                                                child: Icon(
-                                                  Icons.photo,
-                                                  color: Colors.grey,
-                                                  size: Dimensions.h35,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: Dimensions.h10,
-                                            ),
-                                            Text(
-                                              "Gallery",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                  fontSize: Dimensions.h18),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      icon: Icon(
-                        Icons.add_a_photo,
-                        color: Colors.black,
-                        size: 22,
-                      ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-              SizedBox(height: 5,),
-              Text("Name : " + userModel!.name,
-                  style: TextStyle(
-                      fontSize: Dimensions.h18, color:  Colors.black)),
-              SizedBox(height: 5,),
-              Text("Email : " + userModel!.email,
-                  style: TextStyle(
-                      fontSize: Dimensions.h15, color: Colors.black)),
-              SizedBox(height: 10,)
-
-            ],
+                    SizedBox(height: 5,),
+                    Text("Name : "  "${data["Name"]}",
+                        style: TextStyle(
+                            fontSize: Dimensions.h18, color:  Colors.black)),
+                    SizedBox(height: 5,),
+                    Text("Email : " + data["Email"],
+                        style: TextStyle(
+                            fontSize: Dimensions.h15, color: Colors.black)),
+                    SizedBox(height: 10,)
+                  ],);
+              }
           ),
           Divider(
             height: 5,

@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -121,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: greycolor.withOpacity(0.7),
                                     image: DecorationImage(
                                         image: NetworkImage(streamsnapshort
-                                            .data!.docs[index]["ci"]),
+                                          .data!.docs[index]["ci"]),
                                         fit: BoxFit.fill,
                                         colorFilter: ColorFilter.mode(
                                             Colors.black.withOpacity(0.5),
